@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>hell_react</title>
+</head>
+<body>
+
+  <div id="test">
+
+  </div>
+
+  <!-- 首先引入react的核心库 -->
+  <script src="../files/react.development.js"></script>
+  <!-- 操作dom的js -->
+  <script src="../files/react-dom.development.js"></script>
+  <!-- 引入babel -->
+  <script src="../files/babel.min.js"></script>
+
+  <script type="text/babel">//babel用于将jsx代码转换为原生js语法
+    //1.创建一个虚拟DOM
+    //注意：这里没有单引号，是jsx语法
+    let vDOM = <h2>hello,react</h2>
+    
+    //2.渲染虚拟DOM到页面
+    ReactDOM.render(vDOM,document.getElementById("test"))
+    
+  </script>
+
+
+</body>
+</html>

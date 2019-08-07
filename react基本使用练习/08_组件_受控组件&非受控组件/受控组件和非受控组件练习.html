@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>受控组件&非受控组件练习</title>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<script type="text/babel">
+  /*
+  需求: 自定义包含表单的组件
+    1. 界面如下所示
+    2. 输入用户名密码后, 点击登陆提示输入信息
+    3. 不提交表单
+  */
+  class Login extends React.Component{
+    myRef = React.createRef()
+    state = {username : ""}
+    clickHandler=(event)=>{
+      event.preventDefault()
+      let {current} = this.myRef
+      let paw = current.value
+      alert(`账号：${this.state.username}---密码：${paw}`)
+    }
+    changeHandler = (event)=>{
+      let {username} = this.state
+      let name = event.target.value.trim()
+      username = name
+      this.setState({username})
+    }
+
+    render() {
+      return (
+        <div>
+          账号：<input type="text" onChange={this.changeHandler}/> <br/>
+          密码：<input type="password" ref={this.myRef}/> <br/>
+          <button onClick={this.clickHandler}>点我就对了</button>
+        </div>
+      );
+    }
+  }
+  ReactDOM.render(<Login/>, document.getElementById('example'))
+</script>
+</body>
+</html>

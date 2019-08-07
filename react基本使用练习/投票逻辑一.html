@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>投票系统</title>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/javascript" src="./js/react.development.js"></script>
+<script type="text/javascript" src="./js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/javascript" src="./js/babel.min.js"></script>
+<script type="text/babel">
+  class Vote extends React.Component{
+    //定义状态：存储修改的数据
+    state = {sup:10,aga:10}
+    //修改状态state的函数：state属性在哪个组件，修改它的函数就定义在哪个组件
+    addData = (text)=>{
+      //判断传过来的参数的值，进而确定是支持+1；还是反对+1
+      if(text==="支持"){
+        this.setState({
+          sup : this.state.sup +1
+        })
+      }else{
+        this.setState({
+          aga : this.state.aga +1
+        })
+      }
+    }
+    render() {
+      return (
+        <div>
+          <h2>投票系统</h2>
+          <VoteContent {...this.state}/>
+          <VoteBtn {...this.state} addData = {this.addData}/>
+        </div>
+      );
+    }
+  }
+
+  class VoteContent extends React.Component{
+    render() {
+      let {sup,aga}= this.props
+      //判断加和是否为0；因为对于这个表达式：sup/(sup+aga)分母不能为0
+      let rate = (sup+aga==0)? "0" : parseFloat((sup/(sup+aga)*100).toFixed(2))
+      return (
+        <div>
+          <p>支持：  {sup}票</p>
+          <p>反对：  {aga}票</p>
+          <p>支持率： {rate}%</p>
+        </div>
+      );
+    }
+  }
+
+  class VoteBtn extends React.Component{
+    //支持的函数
+    support = (event)=>{
+      //结构赋值来，拿到Vote中定义的函数
+      let {addData} = this.props
+      //获取触发该事件的内容文本
+      let text = event.target.innerText
+      addData(text)
+    }
+    //反对的函数
+    against = (event)=>{
+      //结构赋值来，拿到Vote中定义的函数
+      let {addData} = this.props
+      //获取触发该事件的内容文本
+      let text = event.target.innerText
+      addData(text)
+    }
+    render() {
+      return (
+        <div>
+          <button onClick={this.support}>支持</button>&nbsp;&nbsp;
+          <button onClick={this.against}>反对</button>
+        </div>
+      );
+    }
+  }
+
+  ReactDOM.render(<Vote/>, document.getElementById('example'))
+</script>
+</body>
+</html>

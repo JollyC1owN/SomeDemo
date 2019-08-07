@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>投票系统</title>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/javascript" src="./js/react.development.js"></script>
+<script type="text/javascript" src="./js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/javascript" src="./js/babel.min.js"></script>
+<script type="text/babel">
+  class Vote extends React.Component{
+    state = {sup:0,aga:0,rate:0}
+    addData = (data)=>{
+      let {sup,aga,rate} =data
+      this.setState({sup,aga,rate})
+    }
+    render() {
+      return (
+        <div>
+          <h2>投票系统</h2>
+          <VoteContent {...this.state}/>
+          <VoteBtn {...this.state} addData = {this.addData}/>
+        </div>
+      );
+    }
+  }
+
+  class VoteContent extends React.Component{
+    render() {
+      let {sup,aga,rate}= this.props
+      return (
+        <div>
+          <p>支持：  {sup}票</p>
+          <p>反对：  {aga}票</p>
+          <p>支持率： {rate}%</p>
+        </div>
+      );
+    }
+  }
+
+  class VoteBtn extends React.Component{
+    //支持的函数
+    support = ()=>{
+      let {sup,aga,rate}= this.props
+      let {addData} = this.props
+      sup += 1
+      rate = parseFloat((sup/(sup+aga)*100).toFixed(2))
+      addData({sup,aga,rate})
+    }
+    //反对的函数
+    against = ()=>{
+      let {sup,aga,rate}= this.props
+      let {addData} = this.props
+      aga += 1
+      rate = parseFloat((sup/(sup+aga)*100).toFixed(2))
+      addData({sup,aga,rate})
+    }
+    render() {
+      return (
+        <div>
+          <button onClick={this.support}>支持</button>&nbsp;&nbsp;
+          <button onClick={this.against}>反对</button>
+        </div>
+      );
+    }
+  }
+
+  ReactDOM.render(<Vote/>, document.getElementById('example'))
+</script>
+</body>
+</html>

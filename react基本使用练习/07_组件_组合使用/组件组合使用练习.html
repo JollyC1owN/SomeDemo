@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>组件组合使用练习</title>
+</head>
+<body>
+
+<div id="example"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<script type="text/babel">
+  // 1)	拆分组件: 拆分界面,抽取组件
+  // 2)	实现静态组件: 使用组件实现静态页面效果
+  // 3)	实现动态组件
+    // a.	动态显示初始化数据
+    // b.	交互功能(从绑定事件监听开始)
+
+  class App extends React.Component{
+    state = {todo:["吃饭","睡觉","打豆豆","敲代码"]}
+    addTodo = (data)=>{
+      //拿到原数据，数组中本来就有的数据
+      let {todo} = this.state
+      todo.unshift(data)
+      this.setState({todo})
+    }
+    render(){
+      let {todo} = this.state
+      return(
+        <div>
+          <h1>Simple TODO List</h1>
+          <Add count={todo.length} addTodo={this.addTodo}/>
+          <List todo={this.state.todo}/>
+        </div>
+      )
+    }
+  }
+
+  class Add extends React.Component{
+    add = ()=>{
+      let {addTodo} = this.props
+      let {thing} = this
+      addTodo(thing.value)
+      thing.value = ""
+    }
+    render(){
+      let {count} = this.props
+      return(
+        <div>
+          <input type="text" ref={(input)=>{this.thing = input}}/>
+          <button onClick={this.add}>Add#{count}</button>
+        </div>
+      )
+    }
+  }
+
+  class List extends React.Component{
+    render(){
+      let {todo} = this.props
+      return(
+        <ul>
+          {
+            todo.map((item,index)=>{
+              return <li key={index}>{item}</li>
+            })
+          }
+        </ul>
+      )
+    }
+  }
+
+  ReactDOM.render(<App/>,document.getElementById("example"))
+</script>
+</body>
+</html>

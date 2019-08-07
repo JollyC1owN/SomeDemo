@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>组件组合使用练习</title>
+</head>
+<body>
+
+<div id="example"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<script type="text/babel">
+  // 1)	拆分组件: 拆分界面,抽取组件
+  // 2)	实现静态组件: 使用组件实现静态页面效果
+  // 3)	实现动态组件
+    // a.
+    // b.	交互功能(从绑定事件监听开始)动态显示初始化数据
+    class App extends  React.Component{
+      state = {todo:["吃饭","睡觉","打豆豆","敲代码"]}
+      addTodo=(data)=>{
+        let {todo} = this.state
+        todo.unshift(data)
+        this.setState({todo})
+      }
+      render() {
+        let {todo} = this.state
+        return (
+          <div>
+            <h1>Simple TODO List</h1>
+            <Add count={todo.length} addTodo={this.addTodo}/>
+            <List todo={todo}/>
+          </div>
+        );
+      }
+    }
+
+    class Add extends React.Component{
+      add = ()=>{
+        let{addTodo} = this.props
+        //获取到用户输入的内容，并且去掉两端的空格
+        let data = this.thing.value.trim()
+        //执行更新数组的函数，把data传递过去
+        addTodo(data)
+        //清除输入框中用户输入的内容
+        this.thing.value = ""
+      }
+      render() {
+        let {count} = this.props
+        return (
+          <div>
+            <input type="text" ref={(input)=>{this.thing=input}}/>
+            <button onClick={this.add}>Add#{count}</button>
+          </div>
+        );
+      }
+    }
+
+
+    class List extends React.Component{
+      render() {
+        let {todo} = this.props
+        return (
+          <ul>
+            {todo.map((item,index)=>{
+              return <li key={index}>{item}</li>
+            })}
+          </ul>
+        );
+      }
+    }
+    
+    ReactDOM.render(<App/>, document.getElementById('example'))
+</script>
+</body>
+</html>

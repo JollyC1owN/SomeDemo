@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>组件组合使用</title>
+</head>
+
+<body>
+
+  <div id="example"></div>
+
+  <script type="text/javascript" src="../js/react.development.js"></script>
+  <script type="text/javascript" src="../js/react-dom.development.js"></script>
+  <script type="text/javascript" src="../js/prop-types.js"></script>
+  <script type="text/javascript" src="../js/babel.min.js"></script>
+
+  <script type="text/babel">
+
+    class App extends React.Component {
+      state={todo:["吃饭","睡觉","打豆豆","tomb"]}
+      //状态在哪里，更新状态的方法就在哪里
+      addTodo = (data)=>{
+        //1.获取源状态
+        let todo = [...this.state.todo]
+        //或者用解构赋值来获取
+        let {todo1} = this.state
+        //2.把新数据追加进去
+        todo.unshift(data)
+        //3.更新状态
+        this.setState({todo})
+      }
+      render() {
+        let {todo} = this.state
+        return (
+          <div>
+            <h1>Simple TODO List</h1>
+            <Add count={todo.length} addTodo={this.addTodo}/>
+            <List todo={todo}/>
+          </div>
+        )
+      }
+    }
+    
+    class Add extends React.Component {
+      //限制传参的类型和必要性
+      static propTypes = {
+        count : PropTypes.number.isRequired,
+        addTodo : PropTypes.func.isRequired
+      }
+
+      //添加方法
+      add = ()=>{
+        let {addTodo} = this.props
+        //1.获取用户的输入
+        let {thing} = this
+        // alert(thing.value)
+        //2.将用户的输入追加到todo数组中
+        addTodo(thing.value.trim())
+        //3.清空用户的输入
+        thing.value = ""
+      }
+      render() {
+        //解构赋值拿到传过来的数组的长度
+        let {count} = this.props
+        return (
+          <div>
+            <input type="text" ref={(input)=>{this.thing=input}}/>&nbsp;
+            <button onClick={this.add}>Add#{count}</button>
+          </div>
+        )
+      }
+    }
+
+
+    class List extends React.Component {
+      //限制传参的类型和必要性
+      static propTypes = {
+        todo : PropTypes.array.isRequired,
+      }
+      render() {
+        let {todo} = this.props
+        return (
+            <ul>
+              {todo.map((item,index)=>{
+                return <li key={index}>{item}</li>
+              })}
+            </ul>
+        )
+      }
+    }
+
+    ReactDOM.render(<App/>,document.getElementById(("example")))
+  </script>
+</body>
+
+</html>
