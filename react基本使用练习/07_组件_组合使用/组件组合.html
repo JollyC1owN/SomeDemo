@@ -21,19 +21,23 @@
       // a.
       // b.	交互功能(从绑定事件监听开始)动态显示初始化数据
       class App extends React.Component {
-        state = { todo: ['吃饭', '睡觉', '打豆豆', '敲代码'] }
+        state = {
+          todos: [1, 2, 3]
+        }
         addTodo = data => {
-          let { todo } = this.state
-          todo.unshift(data)
-          this.setState({ todo })
+          let todo = this.state.todos
+          todo.push(data)
+          this.setState({
+            todos: todo
+          })
         }
         render() {
-          let { todo } = this.state
+          let { todos } = this.state
           return (
             <div>
               <h1>Simple TODO List</h1>
-              <Add count={todo.length} addTodo={this.addTodo} />
-              <List todo={todo} />
+              <Add addTodo={this.addTodo} />
+              <List todos={todos} />
             </div>
           )
         }
@@ -41,25 +45,21 @@
 
       class Add extends React.Component {
         add = () => {
-          let { addTodo } = this.props
-          //获取到用户输入的内容，并且去掉两端的空格
-          let data = this.thing.value.trim()
-          //执行更新数组的函数，把data传递过去
-          addTodo(data)
-          //清除输入框中用户输入的内容
-          this.thing.value = ''
+          let addTodo = this.props.addTodo
+          let { text } = this
+          addTodo(text.value.trim())
+          text.value = ''
         }
         render() {
-          let { count } = this.props
           return (
             <div>
               <input
                 type="text"
                 ref={input => {
-                  this.thing = input
+                  this.text = input
                 }}
               />
-              <button onClick={this.add}>Add#{count}</button>
+              <button onClick={this.add}>Add#</button>
             </div>
           )
         }
@@ -67,11 +67,11 @@
 
       class List extends React.Component {
         render() {
-          let { todo } = this.props
+          let { todos } = this.props
           return (
             <ul>
-              {todo.map((item, index) => {
-                return <li key={index}>{item}</li>
+              {todos.map((todo, index) => {
+                return <li key={index}>{todo}</li>
               })}
             </ul>
           )
